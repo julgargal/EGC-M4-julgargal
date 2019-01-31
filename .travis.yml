@@ -1,29 +1,30 @@
-language: python 
+language: python
 
-python: 
-- "3.6"
-- "3.7"
+python:
+  - 3.6
+  - 3.7
+
+sudo: required
+dist: trusty
+addons:
+  postgresql: "9.6"
 
 services:
-- postgresql
+  - postgresql
 
-env: 
-- DJANGO=2.0 DB=postgres
+env:
+  - DJANGO_SETTINGS_MODULE="decide.settings"
 
-global:
-- PGPORT=5432
-
-install: 
-- pip3 install -r requirements.txt
+install:
+  - pip install -r requirements.txt
 
 before_script:
-- cd decide
-- psql -c "create user decide with password 'decide'"
-- psql -c "create database decide owner decide"
-- python3 manage.py makemigrations
+  - psql -c "create user decide with password 'decide'" -U postgres
+  - psql -c "create database decide owner decide" -U postgres
 
-script: 
-- python3 manage.py test 
 
-addons:
-postgresql: '9.6'
+script:
+  - python ./decide/manage.py makemigrations
+  - python ./decide/manage.py migrate
+  - python ./decide/manage.py test ./decide
+  - python ./decide/manage.py test 
