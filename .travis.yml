@@ -21,7 +21,6 @@ before_script:
 - psql -c "create user decide with password 'decide'"
 - psql -c "create database decide owner decide"
 - python3 manage.py makemigrations
-- python3 manage.py migrate
 
 script: 
 - python3 manage.py test 
